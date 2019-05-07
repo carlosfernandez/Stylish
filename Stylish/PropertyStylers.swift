@@ -74,6 +74,8 @@ public extension Style {
     /// Sets property value on UILabels, UITextFields, UITextViews, and their subclasses
     typealias text = Stylish.PropertyStylers.StylishTextControl.Text
     /// Sets property value on UILabels, UITextFields, UITextViews, and their subclasses
+    typealias attributedText = Stylish.PropertyStylers.StylishTextControl.AttributedText
+    /// Sets property value on UILabels, UITextFields, UITextViews, and their subclasses
     typealias textColor = Stylish.PropertyStylers.StylishTextControl.TextColor
     /// Sets property value on UILabels, UITextFields, UITextViews, and their subclasses. Also sets titleLabel font on UIButtons and subclasses
     typealias font = Stylish.PropertyStylers.StylishTextControl.Font
@@ -415,6 +417,20 @@ public extension Stylish.PropertyStylers {
                     textField.text = value
                 case let textView as UIKit.UITextView:
                     textView.text = value
+                default: break
+                }        }
+        }
+        
+        public struct AttributedText: PropertyStyler {
+            public static var propertyKey: String { return "attributedText" }
+            public static func apply(value: NSAttributedString?, to target: TextControl, using bundle: Bundle) {
+                switch target {
+                case let label as UIKit.UILabel:
+                    label.attributedText = value
+                case let textField as UIKit.UITextField:
+                    textField.attributedText = value
+                case let textView as UIKit.UITextView:
+                    textView.attributedText = value
                 default: break
                 }        }
         }
