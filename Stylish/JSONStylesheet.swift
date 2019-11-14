@@ -26,10 +26,15 @@
 // SOFTWARE.
 
 
+public struct Constants {
+    public internal(set) var colors: [String : UIColor] = [:]
+    public internal(set) var fonts: [String : UIFont] = [:]
+}
 
 /// A Stylish Stylesheet that can dynamically populate its member styles and style names by parsing them from a json file.
 public class JSONStylesheet: Stylesheet {
     public private(set) var styles: [String : Style]
+    public private(set) var constants: Constants = Constants()
     
     /// Initializer for instantiating a stylesheet dynamically from json.
     ///
@@ -87,5 +92,23 @@ public class JSONStylesheet: Stylesheet {
             return (styleName, AnyStyle(propertyStylers: propertyStylers))
         }
         self.styles = Dictionary(keyValues, uniquingKeysWith:{ return $1 })
+        self.extractConstants(json: json)
+    }
+    
+    private func extractConstants(json: [String : Any]) {
+        guard let jsonConstants = json["constants"] as? [String : Any] else { return }
+        for key in jsonConstants.keys {
+            //Check if it's a color constant
+            if let colorHex = jsonConstants[key] as? String,
+                let color = UIColor.parse(from: colorHex) {
+                constants.colors[key] = color
+            }
+            else if let constantObject = jsonConstants[key] as? [String : Any],
+                let fontName = constantObject["name"] as? String,
+                let fontSize = constantObject["size"] as? CGFloat,
+                let font = UIFont(name: fontName, size: fontSize) {
+                constants.fonts[key] = font
+            }
+        }
     }
 }

@@ -1,6 +1,10 @@
 {
   "constants": {
-    "DefaultButtonColor": "#FDE3A7"
+    "DefaultButtonColor": "#FDE3A7",
+    "Font1": {
+        "name": "ArialMT",
+        "size": 32.0
+    }
   },
   "styles": [
     {
